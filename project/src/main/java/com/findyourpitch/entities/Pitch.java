@@ -10,6 +10,7 @@ import javax.persistence.*;
 public class Pitch {
     @Id
     @Column(name = "pitch_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int pitchID;
 
     @Column(name = "pitch_name")
@@ -20,10 +21,6 @@ public class Pitch {
 
     public int getPitchID() {
         return pitchID;
-    }
-
-    public void setPitchID(int pitchID) {
-        this.pitchID = pitchID;
     }
 
     public String getPitchName() {
