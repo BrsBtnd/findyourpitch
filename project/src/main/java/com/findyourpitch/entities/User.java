@@ -3,6 +3,8 @@ package com.findyourpitch.entities;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -25,6 +27,12 @@ public class User {
 
     @Column(name = "user_role")
     private String userRole;
+
+    @OneToMany(mappedBy = "user")
+    Set<CalendarEvent> calendarEvents;
+
+    @OneToMany(mappedBy = "user")
+    Set<Pitch> pitches;
 
     public String getUserRole() {
         return userRole;

@@ -53,7 +53,6 @@ public class PitchController {
         return ResponseEntity.ok(updatedPitch);
     }
 
-
     @DeleteMapping("/pitches/{id}")
     public Map<String, Boolean> deletePitch(@PathVariable(value = "id") int pitchID)
         throws ResourceNotFoundException {
