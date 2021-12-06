@@ -14,7 +14,7 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 @EntityListeners(AuditingEntityListener.class)
-public class User implements UserDetails {
+public class User {
 
     @Id
     @Column(name = "user_id")
@@ -53,44 +53,13 @@ public class User implements UserDetails {
         this.userName = userName;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-
-        return AuthorityUtils.commaSeparatedStringToAuthorityList(userRole);
-    }
-
-    @Override
     public String getPassword() {
-
         return userPassword;
     }
 
-    @Override
     public String getUsername() {
-
         return userName;
     }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
-
 
     public String getUserRole() {
         return userRole;
