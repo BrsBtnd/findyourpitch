@@ -15,6 +15,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins = "http://localhost:3000")
 public class PitchController {
 
     @Autowired
@@ -26,12 +27,24 @@ public class PitchController {
     }
 
     @GetMapping("/pitches/{id}")
-    public ResponseEntity<Pitch> getPhoneByID(@PathVariable(value = "id") Integer pitchID)
+    public Pitch getPitchByID(@PathVariable(value = "id") Integer pitchID)
         throws ResourceNotFoundException {
         Pitch pitch = pitchRepository.findById(pitchID)
                 .orElseThrow(() -> new ResourceNotFoundException("Pitch " + pitchID + " not found"));
-        return ResponseEntity.ok().body(pitch);
+        return pitch;
     }
+
+    @GetMapping("/pitches/search/{name}")
+    public List<Pitch> getPitchByName(@PathVariable(value = "name") String name)
+            throws ResourceNotFoundException {
+        try {
+            List<Pitch> pitch = pitchRepository.findPitchByPitchNameContainingIgnoreCase(name);
+            return pitch;
+        }catch (ResourceNotFoundException exception) {
+            throw new ResourceNotFoundException("Pitch " + name + " not found");
+        }
+    }
+
 
     @PostMapping("/pitches")
     public Pitch createPitch(@RequestBody Pitch pitch) {
@@ -48,6 +61,10 @@ public class PitchController {
 
         pitch.setPitchName(pitchDetails.getPitchName());
         pitch.setPitchType(pitchDetails.getPitchType());
+        pitch.setCountry(pitchDetails.getCountry());
+        pitch.setRegion(pitchDetails.getRegion());
+        pitch.setCity(pitchDetails.getCity());
+        pitch.setUser(pitchDetails.getUser());
 
         final Pitch updatedPitch = pitchRepository.save(pitch);
         return ResponseEntity.ok(updatedPitch);

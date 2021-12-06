@@ -13,4 +13,6 @@ public interface PitchRepository extends JpaRepository<Pitch, Integer> {
     List<Pitch> findPitchByUser(User userID);
 
     List<Pitch> findPitchByUserAndPitchID(User user, Integer pitchID);
+
+    List<Pitch> findPitchByPitchNameContainingIgnoreCase(String name);
 }

@@ -6,10 +6,7 @@ import com.findyourpitch.repository.PitchRepository;
 import com.findyourpitch.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +21,7 @@ public class PitchOwnerController {
     @Autowired
     private UserRepository userRepository;
 
+    //egy felhasznalonak a hozza tartozo palyakat adja meg
     @GetMapping("/owners/{ownerID}/pitches")
     public List<Pitch> getAllPitchesByOwner(@PathVariable(value = "ownerID") Integer ownerID)
             throws ResourceNotFoundException {
@@ -36,7 +34,7 @@ public class PitchOwnerController {
             throw new ResourceNotFoundException("Pitches from user " + ownerID + " not found");
         }
     }
-
+    //egy felhasznalonak a hozza tartozo paplyat adja meg
     @GetMapping("owners/{ownerID}/pitches/{pitchID}")
     public List<Pitch> getPitchByOwner(
             @PathVariable(value = "ownerID") Integer ownerID, @PathVariable(value = "pitchID") Integer pitchID

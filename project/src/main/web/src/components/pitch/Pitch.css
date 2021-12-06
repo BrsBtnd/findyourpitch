@@ -1,0 +1,9 @@
+.pitch-card-subtitle {
+  display: flex;
+  margin-bottom: 1.0rem;
+  margin-top: 0.5rem;
+}
+
+.pitch-form-container {
+  margin-top: 2rem;
+}

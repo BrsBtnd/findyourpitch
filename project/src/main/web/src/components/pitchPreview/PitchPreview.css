@@ -1,0 +1,11 @@
+.pitch-card {
+  margin-top: 5px;
+}
+
+.pitch-card-subtitle {
+  display: inline;
+}
+
+.pitch-card-link {
+  float: right;
+}

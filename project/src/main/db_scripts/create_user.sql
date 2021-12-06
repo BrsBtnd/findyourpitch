@@ -24,5 +24,18 @@ on users.user_id = (
 select pitches.pitch_id, pitches.pitch_name, pitches.pitch_type, 
 pitches.user_id, pitches.country, pitches.region, pitches.city
 from pitches 
-inner join users 
-on pitches.user_id = users.user_id
+where user_id = 1
+
+select pitches.pitch_id, pitches.pitch_name, pitches.pitch_type, 
+pitches.user_id, pitches.country, pitches.region, pitches.city,
+users.first_name, users.last_name, users.age, users.user_role
+from pitches 
+inner join users on users.user_id = pitches.user_id
+where users.user_id = 2
+
+select * from users
+
+alter table users 
+add column user_password varchar(250)
+
+

@@ -12,7 +12,7 @@ import java.util.List;
 public interface OwnerRepository extends JpaRepository<User, Integer> {
 
     @Query(value = "select distinct users.user_id, users.first_name, \n" +
-            "users.last_name, users.age, users.user_role\n" +
+            "users.last_name, users.age, users.user_role, users.user_password, users.user_name\n" +
             "from users\n" +
             "inner join pitches \n" +
             "on users.user_id = (\n" +
@@ -20,10 +20,10 @@ public interface OwnerRepository extends JpaRepository<User, Integer> {
             "\tfrom pitches where user_id = ?1 )", nativeQuery = true)
     List<User> findOwnerByID(Integer ownerID);
 
-    @Query(value = "select distinct users.user_id, users.first_name, " +
-            "users.last_name, users.age, users.user_role " +
-            "from users " +
-            "inner join pitches " +
+    @Query(value = "select distinct users.user_id, users.first_name, \n" +
+            "users.last_name, users.age, users.user_role, users.user_password, users.user_name\n" +
+            "from users \n" +
+            "inner join pitches \n" +
             "on users.user_id = pitches.user_id", nativeQuery = true)
     List<User> findOwners();
 
