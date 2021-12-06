@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
@@ -19,13 +20,14 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @RolesAllowed("admin")
     @GetMapping("/users")
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
-
-    private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
     @RolesAllowed({"admin", "user"})
     @GetMapping("/users/{id}")
@@ -36,11 +38,15 @@ public class UserController {
         return ResponseEntity.ok().body(user);
     }
 
+    @GetMapping("/users/username")
+    public User getAllUsersByUserName(){
+        return userRepository.findByUserName("simple2admin");
+    }
 
     @PostMapping("/users")
     public User createUser(@RequestBody User user) {
 
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
@@ -57,7 +63,7 @@ public class UserController {
         user.setUserAge(userDetails.getUserAge());
         user.setUserRole(userDetails.getUserRole());
         user.setUsername(userDetails.getUsername());
-        user.setPassword(bCryptPasswordEncoder.encode(userDetails.getPassword()));
+        user.setPassword(passwordEncoder.encode(userDetails.getPassword()));
 
         final User updatedUser = userRepository.save(user);
         return ResponseEntity.ok(updatedUser);

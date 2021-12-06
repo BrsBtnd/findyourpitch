@@ -4,6 +4,7 @@ import com.findyourpitch.entities.AuthRequest;
 import com.findyourpitch.entities.User;
 import com.findyourpitch.repository.UserRepository;
 import com.findyourpitch.security.JwtTokenUtil;
+import com.findyourpitch.services.CustomAuthenticationManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,15 +25,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthApi {
 
     @Autowired
-    AuthenticationManager authenticationManager;
+    private PasswordEncoder bCryptPasswordEncoder;
+
+    private CustomAuthenticationManager authenticationManager = new CustomAuthenticationManager();
 
     @Autowired
-    JwtTokenUtil jwtTokenUtil;
+    private JwtTokenUtil jwtTokenUtil;
 
     @Autowired
-    UserRepository userRepository;
-
-    private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+    private UserRepository userRepository;
 
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody AuthRequest authRequest) {

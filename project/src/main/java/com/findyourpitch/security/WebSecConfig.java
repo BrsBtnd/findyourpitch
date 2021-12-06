@@ -1,11 +1,15 @@
 package com.findyourpitch.security;
 
+import com.findyourpitch.entities.User;
 import com.findyourpitch.repository.UserRepository;
+import com.findyourpitch.services.CustomAuthenticationManager;
+import com.findyourpitch.services.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -32,13 +36,12 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtTokenFilter jwtTokenFilter;
 
-    private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-
     @Override
     protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
         try {
+            //auth.authenticationProvider(authProvider());
             auth.userDetailsService(username -> userRepository
-                    .findByUserName(username)).passwordEncoder(bCryptPasswordEncoder);
+                    .findByUserName(username)).passwordEncoder(passwordEncoder());
         } catch (Exception exception) {
             throw new UsernameNotFoundException("User with requested username not found ");
         }
@@ -86,11 +89,31 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
     @Override
     @Bean
     public AuthenticationManager authenticationManager() throws Exception {
-        return super.authenticationManager();
+
+        return new CustomAuthenticationManager();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
     GrantedAuthorityDefaults grantedAuthorityDefaults() {
         return new GrantedAuthorityDefaults(""); // Remove the ROLE_ prefix
     }
+
+    @Bean
+    public MyUserDetailsService userDetailsService() {
+        return new MyUserDetailsService();
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService());
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
+
 }
