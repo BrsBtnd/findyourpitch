@@ -15,7 +15,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     private UserRepository userRepository;
@@ -33,6 +37,7 @@ public class UserController {
         return ResponseEntity.ok().body(user);
     }
 
+    //@CrossOrigin(methods = RequestMethod.POST)
     @PostMapping("/users")
     public User createUser(@RequestBody User user) {
 
@@ -52,7 +57,7 @@ public class UserController {
         user.setUserAge(userDetails.getUserAge());
         user.setUserRole(userDetails.getUserRole());
         user.setUsername(userDetails.getUsername());
-        user.setPassword(userDetails.getPassword());
+        user.setPassword(passwordEncoder.encode(userDetails.getPassword()));
 
         final User updatedUser = userRepository.save(user);
         return ResponseEntity.ok(updatedUser);

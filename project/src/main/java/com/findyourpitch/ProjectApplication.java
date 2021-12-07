@@ -12,7 +12,7 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import java.security.Security;
 import java.util.Arrays;
 
-@SpringBootApplication(exclude = SecurityAutoConfiguration.class)
+@SpringBootApplication
 public class ProjectApplication {
 
 	public static void main(String[] args) {

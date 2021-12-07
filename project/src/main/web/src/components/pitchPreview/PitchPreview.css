@@ -1,11 +1,11 @@
-.pitch-card {
+.pitch-previev-card {
   margin-top: 5px;
 }
 
-.pitch-card-subtitle {
+.pitch-previev-card-subtitle {
   display: inline;
 }
 
-.pitch-card-link {
+.pitch-previev-card-link {
   float: right;
 }

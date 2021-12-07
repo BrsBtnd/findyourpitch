@@ -1,6 +1,17 @@
-import { Container, Navbar, Nav, NavLink } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Container, Navbar, Nav, NavLink, Button, Offcanvas } from "react-bootstrap";
+import LoginOffCanvas from "../loginOffCanvas/LoginOffCanvas";
+import LogoutButton from "../logoutButton/LogoutButton";
 
 export default function NavBar() {
+
+  function loginOrLogout() {
+    if(!localStorage.getItem("jwtToken")) {
+      return <LoginOffCanvas />
+    } 
+    return <LogoutButton />;
+  }
+
   return (
     <Navbar>
       <Container>
@@ -10,7 +21,7 @@ export default function NavBar() {
           </Navbar.Brand>
         </Nav>
         <Nav>
-          <NavLink to="/login" disabled >Login</NavLink>
+          {loginOrLogout()}
         </Nav>
       </Container>
     </Navbar>
