@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import apiServerUrl from "../../apiServerUrl";
 import { useParams } from "react-router-dom";
-import { Card, Container, Form, ListGroup } from "react-bootstrap";
+import { Card, Container, FloatingLabel, Form, ListGroup, Button } from "react-bootstrap";
+import CreateAccountForm from "../createAccountForm/CreateAccountForm";
+import ReservationForm from "../reservationForm/ReservationForm";
 import './Pitch.css';
 
 function Pitch(props) {
@@ -26,7 +28,7 @@ function Pitch(props) {
   return( 
     <>
     <Container>
-      <Card>
+      <Card border="success">
         <Card.Body>
           <Card.Title variant="success">{pitch.pitchName}</Card.Title>
           <Card.Subtitle className="pitch-card-subtitle">{`Pitch owner: ${pitch.user.firstName} ${pitch.user.lastName}`} </Card.Subtitle>
@@ -40,15 +42,8 @@ function Pitch(props) {
       </Card>
     </Container>
 
-    <Container className="pitch-form-container">
-      <Card>
-        <Card.Body>  
-          <Card.Title>Make your reservation on this pitch!</Card.Title>
-          <Form>
-          </Form>
-        </Card.Body>
-      </Card>
-    </Container>
+    {!localStorage.getItem("userTokenInfo") ? <CreateAccountForm/> : <ReservationForm key={pitchID} pitchID={pitchID} />}
+    
     </>
   );
 }

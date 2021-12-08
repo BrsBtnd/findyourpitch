@@ -6,7 +6,7 @@ import { Button, Container, Row } from 'react-bootstrap'
 export default function Pitch(props) {
   
   return (
-      <Card className="pitch-previev-card">
+      <Card className="pitch-previev-card" border="success">
         <Card.Body>
           
           <Card.Title>{props.pitch.pitchName}</Card.Title>

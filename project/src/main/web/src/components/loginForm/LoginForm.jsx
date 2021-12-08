@@ -1,32 +1,23 @@
 import { useState } from "react"
 import { FloatingLabel, Form, Button, Container } from "react-bootstrap"
 import "./LoginForm.css"
+import { useNavigate, useLocation } from "react-router-dom";
 import apiServerUrl from "../../apiServerUrl";
 export default function loginForm() {
   
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  const navigate = useNavigate();
+  const location = useLocation();
+
   function login() {
 
-    const request = {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: {
-        userName: JSON.stringify(username),
-        password: JSON.stringify(password)
-      }
-    }
-    
     const reqBody = {
       userName: username,
       password: password,
     }
 
-    console.log(JSON.stringify(reqBody));
     fetch(`http://localhost:8080/api/auth/login`, {
       method: "POST",
       mode: "cors",
@@ -37,7 +28,14 @@ export default function loginForm() {
     })
     .then(response => response.json())
     .then((userData) => {
-      console.log(userData);
+      const userTokenInfo = {
+        jwtToken: userData.token, 
+        userID: userData.userID,
+        userName: userData.userName,
+        userRole: userData.roles[0]
+      }
+      localStorage.setItem("userTokenInfo", JSON.stringify(userTokenInfo));
+      navigate(location.pathname);
     });
   }
 
