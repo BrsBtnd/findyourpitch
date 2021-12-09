@@ -22,7 +22,6 @@ public class PitchOwnerController {
     @Autowired
     private UserRepository userRepository;
 
-    //egy felhasznalonak a hozza tartozo palyakat adja meg
     @GetMapping("/owners/{ownerID}/pitches")
     public List<Pitch> getAllPitchesByOwner(@PathVariable(value = "ownerID") Integer ownerID)
             throws ResourceNotFoundException {
@@ -35,7 +34,7 @@ public class PitchOwnerController {
             throw new ResourceNotFoundException("Pitches from user " + ownerID + " not found");
         }
     }
-    //egy felhasznalonak a hozza tartozo paplyat adja meg
+
     @GetMapping("owners/{ownerID}/pitches/{pitchID}")
     public List<Pitch> getPitchByOwner(
             @PathVariable(value = "ownerID") Integer ownerID, @PathVariable(value = "pitchID") Integer pitchID

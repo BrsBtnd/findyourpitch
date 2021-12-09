@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -20,4 +21,11 @@ public interface CalendarEventRepository extends JpaRepository<CalendarEvent, In
 
     //find all users by pitchID
     List<CalendarEvent> findUserByPitch(CalendarEvent pitch);
+
+    List<CalendarEvent> findByStartDateAfter(LocalDateTime startDate);
+
+    @Query(value = "select * from calendar_events\n" +
+            "where\n" +
+            "start_date >= ?1 and end_date <= ?2\n", nativeQuery = true)
+    List<CalendarEvent> findCalendarEventBetweenDates(LocalDateTime startDate, LocalDateTime endDate);
 }

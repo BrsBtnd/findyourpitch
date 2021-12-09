@@ -1,5 +1,6 @@
 package com.findyourpitch.controller;
 
+import com.findyourpitch.entities.Pitch;
 import com.findyourpitch.entities.User;
 import com.findyourpitch.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -37,14 +40,6 @@ public class UserController {
         return ResponseEntity.ok().body(user);
     }
 
-    //@CrossOrigin(methods = RequestMethod.POST)
-    @PostMapping("/users")
-    public User createUser(@RequestBody User user) {
-
-        user.setPassword(user.getPassword());
-        return userRepository.save(user);
-    }
-
     @PutMapping("/users/{id}")
     public ResponseEntity<User> updateUser(
             @PathVariable(value = "id") Integer userID, @Valid @RequestBody User userDetails)
@@ -61,5 +56,19 @@ public class UserController {
 
         final User updatedUser = userRepository.save(user);
         return ResponseEntity.ok(updatedUser);
+    }
+
+    @DeleteMapping("/users/{id}")
+    public Map<String, Boolean> deleteUser(@PathVariable(value = "id") int userID)
+            throws ResourceNotFoundException {
+
+        User user = userRepository.findById(userID)
+                .orElseThrow(() -> new ResourceNotFoundException("User " + userID + " not found"));
+
+        userRepository.delete(user);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("delete", Boolean.TRUE);
+
+        return response;
     }
 }

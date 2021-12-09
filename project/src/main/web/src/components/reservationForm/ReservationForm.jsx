@@ -8,25 +8,18 @@ export default function reservationForm(props) {
   const [endDate, setEndDate] = useState("");  
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
+  const [reservation, setReservation] = useState(false);
 
   const userInfo = JSON.parse(localStorage.getItem("userTokenInfo"));
 
   function reservationFormHandler() {
-    /*const userResponse = await fetch(`${apiServerUrl}/users/${userInfo.userID}`);
-    const userData = await userResponse.json();
     
-    const pitchResponse = await fetch(`${apiServerUrl}/pitches/${props.pitchID}`);
-    const pitchData = await pitchResponse.json();
-    
-    console.log(userData);
-    console.log(pitchData);*/
     const reqBody = {
       startDate: `${startDate} ${startTime}:00`,
       endDate: `${endDate} ${endTime}:00`,
       user: userInfo.userID,
       pitch: props.pitchID
     }
-    console.log(JSON.stringify(reqBody));
 
     fetch(`${apiServerUrl}/users/${userInfo.userID}/pitches`, {
       method: "POST", 
@@ -39,7 +32,7 @@ export default function reservationForm(props) {
     })
     .then(response => response.json())
     .then((data) => {
-      console.log(data);
+      setReservation(true);
       //navigate(location.pathname);
     });
   }
@@ -48,6 +41,12 @@ export default function reservationForm(props) {
     <Card style={{width: "60%"}} >
       <Card.Body>
         <Card.Title >Make your reservation on this pitch!</Card.Title> 
+          
+        { reservation ? 
+        <Card.Subtitle className="text-success create-account-form-subtitle">
+          Successfull reservation!
+        </Card.Subtitle> : <></> }
+
           <FloatingLabel controlId="floatingStartDate" label="Event start date">
           <Form.Control type="date" placeholder="Event start date" className="reservation-form-control" 
           value={startDate}

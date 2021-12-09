@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -44,7 +45,6 @@ public class PitchController {
             throw new ResourceNotFoundException("Pitch " + name + " not found");
         }
     }
-
 
     @PostMapping("/pitches")
     public Pitch createPitch(@RequestBody Pitch pitch) {

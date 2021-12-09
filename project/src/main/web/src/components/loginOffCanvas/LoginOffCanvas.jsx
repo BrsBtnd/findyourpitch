@@ -18,7 +18,8 @@ export default function loginOffCanvas() {
             <Offcanvas.Title>Login</Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
-            <LoginForm/>
+            <LoginForm />
+            
           </Offcanvas.Body>
         </Offcanvas>
     

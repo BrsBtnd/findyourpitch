@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import NavBar from './components/navBar/NavBar';
 import PitchSearch from './components/pitchSearch/PitchSearch';
 import Pitch from './components/pitch/Pitch';
+import Reservations from './components/reservations/Reservations';
+
 import { useEffect } from 'react';
 
 export default function App() {
@@ -15,6 +17,7 @@ export default function App() {
           <Route exact path="/" element={<PitchSearch />}/>
           <Route exact path="/api/pitches" element={<PitchSearch />}/>
           <Route path="api/pitches/:pitchID" element={<Pitch/>} />
+          <Route path="api/users/:userID/pitches" element={<Reservations/>} />
         </Routes>
       </main>
     </BrowserRouter>

@@ -1,5 +1,6 @@
 package com.findyourpitch.controller;
 
+import com.findyourpitch.entities.User;
 import com.findyourpitch.payload.request.LoginRequest;
 import com.findyourpitch.payload.response.JwtResponse;
 import com.findyourpitch.repository.UserRepository;
@@ -38,13 +39,9 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
 
-        System.out.println(loginRequest.getUserName());
-
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUserName(), loginRequest.getPassword()));
 
-
-        System.out.println(loginRequest.getUserName() + " " + loginRequest.getPassword());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
 
@@ -57,5 +54,12 @@ public class AuthController {
         return ResponseEntity.ok(
                 new JwtResponse(jwt, userDetails.getUserID(), userDetails.getUsername(), roles)
         );
+    }
+
+    @PostMapping("/signup")
+    public User createUser(@RequestBody User user) {
+        user.setUserRole("user");
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
     }
 }
