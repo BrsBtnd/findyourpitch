@@ -19,10 +19,19 @@ export default function reservations() {
   }
   const [reservations, setReservations] = useState([]);
 
+  const userInfo = JSON.parse(localStorage.getItem("userTokenInfo"));
+  
   const { userID } = useParams();
 
   useEffect(() => {
-    fetch(`${apiServerUrl}/users/${userID}/pitches`)
+    fetch(`${apiServerUrl}/users/${userID}/pitches`, {
+      method: "GET",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${userInfo.jwtToken}`
+      },
+    })
       .then(response => response.json())
       .then(data => setReservations(data));
   },[]);

@@ -3,14 +3,19 @@ package com.findyourpitch.controller;
 import com.findyourpitch.entities.Pitch;
 import com.findyourpitch.entities.User;
 import com.findyourpitch.repository.UserRepository;
+import com.findyourpitch.security.jwt.AuthTokenFilter;
+import com.findyourpitch.security.jwt.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -27,17 +32,31 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    JwtUtils jwtUtils;
+
+    AuthTokenFilter authTokenFilter = new AuthTokenFilter();
+
     @GetMapping("/users")
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<User> getUserByID(@PathVariable(value = "id") Integer userID)
+    public ResponseEntity<?> getUserByID(@PathVariable(value = "id") Integer userID, HttpServletRequest request)
         throws ResourceNotFoundException {
         User user = userRepository.findById(userID)
                 .orElseThrow(() -> new ResourceNotFoundException("User " + userID + " not found"));
-        return ResponseEntity.ok().body(user);
+
+        String jwt = authTokenFilter.parseJwt(request);
+        String usernameFromJwt = jwtUtils.getUserNameFromJwtToken(jwt);
+
+        if(user.getUserRole().equals("user") && user.getUsername().equals(usernameFromJwt)) {
+            return ResponseEntity.ok().body(user);
+        } else {
+            return new ResponseEntity<String>("Unauthorized", HttpStatus.UNAUTHORIZED);
+        }
+
     }
 
     @PutMapping("/users/{id}")
